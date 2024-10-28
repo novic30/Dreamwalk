@@ -7,7 +7,11 @@ public class Movement : MonoBehaviour
 {
     public int speed = 1;
     public int jump = 1;
+    float LeftRight;
     float Up;
+    public bool onground = false;
+    public Rigidbody2D rb2d;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -17,23 +21,35 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float LeftRight = Input.GetAxis("Horizontal"); 
-        float Up = Input.GetAxis("Vertical");
-            
-        Vector3 movement = new Vector3(LeftRight * speed * Time.deltaTime, Up * jump * Time.deltaTime, 0);
-        transform.position += movement;
-
+        LeftRight = Input.GetAxis("Horizontal"); 
+        Up = Input.GetAxis("Vertical");
         if (LeftRight <0)
+            {
+                transform.rotation = Quaternion.Euler(0,0,20);
+            }
+            if (LeftRight ==0)
+            {
+                transform.rotation = Quaternion.Euler(0,0,0);
+            }
+            if (LeftRight >0)
+            {
+                transform.rotation = Quaternion.Euler(0,0,-20);
+            }
+        if (onground)
         {
-            transform.rotation = Quaternion.Euler(0,0,20);
+            rb2d.velocity = new Vector2 (LeftRight * speed, Up * jump);
         }
-        if (LeftRight ==0)
+        else
         {
-            transform.rotation = Quaternion.Euler(0,0,0);
+            rb2d.velocity += new Vector2 (((LeftRight * speed)/2)*Time.deltaTime,0);
         }
-        if (LeftRight >0)
-        {
-            transform.rotation = Quaternion.Euler(0,0,-20);
-        }
+    }
+    private void OnCollisionStay2D(Collision2D other) 
+    {
+        onground = true;
+    }
+    private void OnCollisionExit2D(Collision2D other) 
+    {
+        onground = false;
     }
 }
