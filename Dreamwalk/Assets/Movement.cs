@@ -5,51 +5,65 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public int speed = 1;
-    public int jump = 1;
-    float LeftRight;
-    float Up;
-    public bool onground = false;
-    public Rigidbody2D rb2d;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+   private float horizontal;
+    private float speed = 32f;
+    private float jumpingPower = 72f;
+    private bool isFacingRight = true;
+    Quaternion myRotation = Quaternion.identity;
 
-    // Update is called once per frame
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Transform spriteRender;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
+
     void Update()
     {
-        LeftRight = Input.GetAxis("Horizontal"); 
-        Up = Input.GetAxis("Vertical");
-        if (LeftRight <0)
-            {
-                transform.rotation = Quaternion.Euler(0,0,20);
-            }
-            if (LeftRight ==0)
-            {
-                transform.rotation = Quaternion.Euler(0,0,0);
-            }
-            if (LeftRight >0)
-            {
-                transform.rotation = Quaternion.Euler(0,0,-20);
-            }
-        if (onground)
+        horizontal = Input.GetAxisRaw("Horizontal");
+        if (horizontal < 0)
         {
-            rb2d.velocity = new Vector2 (LeftRight * speed, Up * jump);
+            myRotation.eulerAngles = new Vector3(0, 0, 10);
+        }
+        else if (horizontal > 0)
+        {
+            myRotation.eulerAngles = new Vector3(0, 0, -10);
         }
         else
         {
-            rb2d.velocity += new Vector2 (((LeftRight * speed)/2)*Time.deltaTime,0);
+            myRotation.eulerAngles = new Vector3(0, 0, 0);
         }
+        spriteRender.rotation = myRotation;
+
+        if (Input.GetKeyDown(KeyCode.W) && IsGrounded())
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+        }
+
+        if (Input.GetKeyUp(KeyCode.W) && rb.velocity.y > 0f)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+        }
+
+        Flip();
     }
-    private void OnCollisionStay2D(Collision2D other) 
+
+    private void FixedUpdate()
     {
-        onground = true;
+        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
     }
-    private void OnCollisionExit2D(Collision2D other) 
+
+    private bool IsGrounded()
     {
-        onground = false;
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+    }
+
+    private void Flip()
+    {
+        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
+        }
     }
 }
