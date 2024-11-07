@@ -6,17 +6,19 @@ public class camera_folow : MonoBehaviour
 {
     public Transform target;
     public Vector3 offset;
-    public int min;
-    private Vector3 nulls;
+    private Vector3 offset2;
 
 
     void LateUpdate ()
     {
-        nulls = target.position
-        if ( target.position > new Vector3(nulls.x,15,nulls.z))
+        if ( target.position.y + offset.y > 14.5f)
         {
-            target.y = 15;
+            offset2 = new Vector3(offset.x,14.5f, offset.z);
         }
-        transform.position = target.position + offset;
+        else
+        {
+            offset2 = offset;
+        }
+        transform.position = target.position + offset2;
     }
 }
