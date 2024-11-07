@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour
 {
    private float horizontal;
     private float speed = 32f;
-    private float jumpingPower = 72f;
+    private float jumpingPower = 64f;
     private bool isFacingRight = true;
     Quaternion myRotation = Quaternion.identity;
 
