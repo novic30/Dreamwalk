@@ -1,32 +1,39 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI; 
 
 public class GameTimer : MonoBehaviour
 {
-    public TextMeshProUGUI timerText;
-    private float startTime;
-    private bool isGameRunning = true;
-
+    public Text timerText;  
+    private float timer = 0f;
+    private bool isTimerRunning = true; 
+    public float targetXPosition = -255f;  
+    public float stopDistance = 1f;  
     void Start()
     {
-        startTime = Time.time;
+       
+        Debug.Log("Timer target X position: " + targetXPosition);
     }
 
+ 
     void Update()
     {
-        if (isGameRunning)
+        if (isTimerRunning)
         {
-            float elapsedTime = Time.time - startTime;
-            int minutes = Mathf.FloorToInt(elapsedTime / 60);
-            int seconds = Mathf.FloorToInt(elapsedTime % 60);
-            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            timer += Time.deltaTime;
+            timerText.text = "Time: " + timer.ToString("F2"); 
+
+            
+            if (Mathf.Abs(transform.position.x - targetXPosition) <= stopDistance)
+            {
+                StopTimer();
+            }
         }
     }
 
-    public void StopTimer()
+    
+    void StopTimer()
     {
-        isGameRunning = false;
-        Debug.Log("Timer stopped at: " + timerText.text);
+        isTimerRunning = false;
+        Debug.Log("Timer Stopped! Final Time: " + timer.ToString("F2"));
     }
 }
