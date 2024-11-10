@@ -6,12 +6,10 @@ public class GameTimer : MonoBehaviour
     public Text timerText;  
     private float timer = 0f;
     private bool isTimerRunning = true; 
-    public float targetXPosition = -255f;  
+    public GameObject mc;
     public float stopDistance = 1f;  
     void Start()
-    {
-       
-        Debug.Log("Timer target X position: " + targetXPosition);
+    {   
     }
 
  
@@ -21,14 +19,16 @@ public class GameTimer : MonoBehaviour
         {
             timer += Time.deltaTime;
             timerText.text = "Time: " + timer.ToString("F2"); 
-
             
-            if (Mathf.Abs(transform.position.x - targetXPosition) <= stopDistance)
+            
+        }
+            
+            if (mc.transform.position.x >= -210f)
             {
                 StopTimer();
             }
-        }
     }
+    
 
     
     void StopTimer()
