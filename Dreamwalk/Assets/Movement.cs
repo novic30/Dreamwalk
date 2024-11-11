@@ -12,9 +12,11 @@ public class Movement : MonoBehaviour
     Quaternion myRotation = Quaternion.identity;
 
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private CapsuleCollider2D cc;
     [SerializeField] private Transform spriteRender;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask deathLayer;
 
     void Update()
     {
@@ -44,6 +46,7 @@ public class Movement : MonoBehaviour
         }
 
         Flip();
+        isdead();
     }
 
     private void FixedUpdate()
@@ -54,6 +57,14 @@ public class Movement : MonoBehaviour
     private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 5f, groundLayer);
+    }
+
+    private void isdead()
+    {
+        if (Physics2D.OverlapCapsule(rb.position - new Vector2(0.3f,0), new Vector2(5.01f, 10.01f), CapsuleDirection2D.Vertical, 0, deathLayer))
+        {
+            rb.position = new Vector2(-649, -20);
+        }
     }
 
     private void Flip()
