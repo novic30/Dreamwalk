@@ -47,6 +47,10 @@ public class Movement : MonoBehaviour
 
         Flip();
         isdead();
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            rb.position = new Vector2(-649, -23);
+        }
     }
 
     private void FixedUpdate()
@@ -63,7 +67,7 @@ public class Movement : MonoBehaviour
     {
         if (Physics2D.OverlapCapsule(rb.position - new Vector2(0.3f,0), new Vector2(5.01f, 10.01f), CapsuleDirection2D.Vertical, 0, deathLayer))
         {
-            rb.position = new Vector2(-649, -20);
+            rb.position = new Vector2(-649, -23);
         }
     }
 

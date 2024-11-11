@@ -43,6 +43,11 @@ public class GameTimer : MonoBehaviour
         {
             StopTimer();
         }
+        
+        if(isTimerRunning && mc.transform.position.x <= startPositionX )
+        {
+            timer = 0f;
+        }
     }
 
     
