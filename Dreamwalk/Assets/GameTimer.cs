@@ -1,15 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+
 
 public class GameTimer : MonoBehaviour
 {
-    public Text timerText;  
+    public TMP_Text timerText;  
     private float timer = 0f;
     private bool isTimerRunning = false;  
+    private bool startTime = false;  
     public GameObject mc;  
-    public float startPositionX = -400f; 
+    public float startPositionX = -640f; 
     public float stopPositionX = -210f; 
-    public float stopDistance = 1f;  
 
     
     void Start()
@@ -23,9 +25,10 @@ public class GameTimer : MonoBehaviour
     void Update()
     {
        
-        if (!isTimerRunning && mc.transform.position.x >= startPositionX - stopDistance)
+        if (!isTimerRunning && !startTime && mc.transform.position.x >= startPositionX )
         {
             StartTimer();
+            startTime = true;
         }
 
         
@@ -36,7 +39,7 @@ public class GameTimer : MonoBehaviour
         }
 
         
-        if (isTimerRunning && mc.transform.position.x >= stopPositionX - stopDistance)
+        if (isTimerRunning && mc.transform.position.x >=  stopPositionX)
         {
             StopTimer();
         }
